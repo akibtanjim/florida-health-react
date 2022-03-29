@@ -1,6 +1,10 @@
 {
-  "name": "react-boilerplate",
+  "name": "florida-health-react",
   "version": "0.1.0",
+  "author": {
+    "name": "Akib Tanjim",
+    "email": "akibtanjim@gmail.com"
+  },
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^1.6.2",
