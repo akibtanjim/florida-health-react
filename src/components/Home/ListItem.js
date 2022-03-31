@@ -1,11 +1,35 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { selectFacility } from '../../redux/facilitySlice';
 
 const ListItem = ({ item }) => {
-  const { name = '-', city, address, state, zip, county = '-', phone, type, capacity } = item;
+  const dispatch = useDispatch();
+  const {
+    name = '-',
+    city,
+    address,
+    state,
+    zip,
+    county = '-',
+    phone,
+    type,
+    capacity,
+    slug = '',
+  } = item;
+
+  const onDetailsClick = () => {
+    dispatch(selectFacility(item));
+  };
+
   return (
     <tr className="text-center">
-      <td scope="row">{name}</td>
+      <td scope="row">
+        <Link to={`/facilities/${slug}`} onClick={onDetailsClick}>
+          {name}
+        </Link>
+      </td>
       <td>{type}</td>
       <td>{address}</td>
       <td>{city}</td>

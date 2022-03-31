@@ -7,6 +7,7 @@ import facilitySlice from './facilitySlice';
 const persistConfig = {
   key: 'root',
   storage,
+  whitelist: ['facility'],
 };
 
 const reducers = combineReducers({

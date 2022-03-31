@@ -7,7 +7,7 @@ import Text from '../components/Input/Text';
 import File from '../components/Input/File';
 import List from '../components/Home/List';
 
-import { storeFacilities } from '../redux/facilitySlice';
+import { selectFacility, storeFacilities } from '../redux/facilitySlice';
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -108,6 +108,7 @@ const Home = () => {
   };
 
   useEffect(() => {
+    dispatch(selectFacility({}));
     setLoading(true);
     api
       .get('/facilities')

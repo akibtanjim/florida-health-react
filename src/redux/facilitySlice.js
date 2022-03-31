@@ -11,11 +11,11 @@ export const facilitySlice = createSlice({
     storeFacilities: (state, { payload }) => {
       state.faclilites = payload;
     },
-    selectedFacility: (state, { payload }) => {
+    selectFacility: (state, { payload }) => {
       state.selectedFacility = payload;
     },
   },
 });
 
-export const { storeFacilities, selectedFacility } = facilitySlice.actions;
+export const { storeFacilities, selectFacility } = facilitySlice.actions;
 export default facilitySlice.reducer;

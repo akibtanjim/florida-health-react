@@ -1,9 +1,12 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 const Header = () => {
   return (
     <nav className="navbar navbar-expand-md navbar-dark bg-dark mb-3">
       <div className="container">
-        <a className="navbar-brand letter-white">Florida Health Facilities</a>
+        <Link className="navbar-brand letter-white" to="/">
+          Florida Health Facilities
+        </Link>
         <button
           type="button"
           className="navbar-toggler"

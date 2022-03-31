@@ -1,0 +1,41 @@
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: #fff;
+  background-clip: border-box;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  border-radius: 0.25rem;
+}
+
+.card .card-header {
+  background-color: #fff;
+  border-bottom: none;
+}
+
+.full-height {
+  height: calc(100vh - 10em);
+}
+
+.marker {
+  position: absolute;
+  width: 70;
+  height: 70;
+  border: '1px solid #f44336';
+  border-radius: 40;
+  background-color: black;
+  text-align: center;
+  color: white;
+  font-size: 10;
+  font-weight: 'bold';
+  padding: 4;
+}
+
+button:disabled {
+  color: #6c757d;
+  pointer-events: none;
+  background-color: #fff;
+  border-color: #dee2e6;
+}
