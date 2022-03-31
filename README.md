@@ -11,7 +11,7 @@ This is the front end app for Florida facility search. It's built with `React.js
 
 ## Installation
 
-- Clone the repository: `https://github.com/akibtanjim/florida-health-react.git`
+- Clone the repository: `git clone https://github.com/akibtanjim/florida-health-react.git`
 - Copy `.env.example`to `.env`. Fill this with appropriate value
 - Run `npm i`
 - Run `npm start`
