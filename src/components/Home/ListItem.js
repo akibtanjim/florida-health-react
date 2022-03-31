@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const ListItem = ({ item }) => {
-  const { name = '-', city, address, state, zip, county, phone, type, capacity } = item;
+  const { name = '-', city, address, state, zip, county = '-', phone, type, capacity } = item;
   return (
     <tr className="text-center">
       <td scope="row">{name}</td>
