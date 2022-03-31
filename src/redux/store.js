@@ -2,7 +2,7 @@ import { combineReducers } from 'redux';
 import { configureStore } from '@reduxjs/toolkit';
 import { persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import counterReducer from './counterSlice';
+import facilitySlice from './facilitySlice';
 
 const persistConfig = {
   key: 'root',
@@ -10,7 +10,7 @@ const persistConfig = {
 };
 
 const reducers = combineReducers({
-  reducer: counterReducer,
+  facility: facilitySlice,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducers);

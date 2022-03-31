@@ -1,23 +1,25 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import Swal from 'sweetalert2';
+
+import api from '../services/api';
 import Text from '../components/Input/Text';
-import { useState } from 'react';
 import File from '../components/Input/File';
-// import { useDispatch, useSelector } from 'react-redux';
-// import { increment, decrement, addAmount } from '../redux/counterSlice';
+import List from '../components/Home/List';
+
+import { storeFacilities } from '../redux/facilitySlice';
 
 const Home = () => {
-  //   const [value, setValue] = useState(0);
-
-  //   const { amount } = useSelector((state) => state.reducer);
-
-  //   const dispatch = useDispatch();
-
-  const [name, setName] = useState('');
-  const [city, setCity] = useState('');
-  const [state, setState] = useState('');
+  const dispatch = useDispatch();
+  const [name, setName] = useState(undefined);
+  const [city, setCity] = useState(undefined);
+  const [state, setState] = useState(undefined);
   const [fileCount, setFileCount] = useState(1);
   const [images, setImages] = useState([]);
   const [showFileIinput, setShowFileIinput] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [facilities, setFacilities] = useState([]);
+  const [searchButtonDisable, setSearchButtonDisable] = useState(true);
 
   const onNameChange = (e) => {
     setName(e.target.value);
@@ -32,8 +34,16 @@ const Home = () => {
   const addMoreFileInput = () => {
     setFileCount(fileCount + 1);
   };
-
+  const encodeImageFileAsURL = (element) => {
+    var file = element.files[0];
+    var reader = new FileReader();
+    reader.onloadend = function () {
+      console.log('RESULT', reader.result);
+    };
+    return reader.readAsDataURL(file);
+  };
   const onFileChange = (e) => {
+    encodeImageFileAsURL(e.target);
     setImages([...images, e.target.files[0]]);
   };
 
@@ -42,10 +52,58 @@ const Home = () => {
   };
 
   useEffect(() => {
+    setLoading(true);
+    api
+      .get('/facilities')
+      .then((response) => {
+        const data = response?.data?.data || [];
+        dispatch(storeFacilities(data));
+        setFacilities(data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        setLoading(false);
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: error?.response?.data?.message || 'Something went wrong!',
+        });
+      });
     return () => {
       setShowFileIinput(false);
     };
   }, []);
+  useEffect(() => {
+    if (name || city || state) {
+      setSearchButtonDisable(false);
+    } else {
+      setSearchButtonDisable(true);
+    }
+  }, [name, city, state]);
+
+  const onSearchClick = () => {
+    setLoading(true);
+    api
+      .post('/facilities/search', {
+        name: name !== '' ? name : undefined,
+        city: city !== '' ? city : undefined,
+        state: state !== '' ? state : undefined,
+      })
+      .then((response) => {
+        const data = response?.data?.data || [];
+        dispatch(storeFacilities(data));
+        setFacilities(data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        setLoading(false);
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: error?.response?.data?.message || 'Something went wrong!',
+        });
+      });
+  };
 
   return (
     <>
@@ -67,7 +125,7 @@ const Home = () => {
       </div>
       {showFileIinput && (
         <div className="row mb-3">
-          <File fileCount={fileCount} onChange={onFileChange} />
+          <File fileCount={fileCount} onChange={onFileChange} accept="image/png, image/jpeg" />
           <div className="col col-md-12 mb-3">
             <button type="button" className="btn btn-sm btn-outline-dark float-end mb-10">
               Scapre & Save
@@ -90,34 +148,18 @@ const Home = () => {
           <button className="btn btn btn-primary rounded-4 ms-4" onClick={onScapeButtonClick}>
             Scrape
           </button>
-          <button className="btn btn btn-primary rounded-4">Search</button>
+          <button
+            className="btn btn btn-primary rounded-4"
+            disabled={searchButtonDisable}
+            onClick={onSearchClick}
+          >
+            Search
+          </button>
         </div>
       </div>
       <div className="row">
         <div className="col col-md-12">
-          <div className="table-responsive">
-            <table className="table table-light table-bordered table-striped table-hover">
-              <thead>
-                <tr className="text-dark text-center">
-                  <th scope="col">Name</th>
-                  <th scope="col">Address</th>
-                  <th scope="col">City</th>
-                  <th scope="col">Zip</th>
-                  <th scope="col">County</th>
-                  <th scope="col">Phone</th>
-                  <th scope="col">Type</th>
-                  <th scope="col">Capacity</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td colSpan="8" className="text-center">
-                    <p className="fs-6 fw-bold">No Facilities Found</p>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+          <List loading={loading} facilities={facilities || []} />
         </div>
       </div>
     </>
